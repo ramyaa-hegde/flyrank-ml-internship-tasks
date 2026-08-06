@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Machine Learning–Based Content Opportunity Scoring for Search Visibility Optimization | Ramya Hegde</title>
+  <meta name="description" content="A FlyRank ML Internship capstone project on content opportunity scoring for search visibility optimization using tree-based machine learning models and search performance telemetry." />
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --surface:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:#e2e8f0;
+      --accent:#2563eb;
+      --accent-dark:#1d4ed8;
+      --max:900px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.7;
+    }
+    .container{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:32px 24px 64px;
+    }
+    .paper{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:40px;
+      box-shadow:0 10px 30px rgba(15,23,42,.06);
+    }
+    h1{
+      font-size:2.4rem;
+      line-height:1.15;
+      margin:0 0 12px;
+    }
+    .meta{
+      color:var(--muted);
+      margin-bottom:28px;
+      font-size:.98rem;
+    }
+    h2{
+      margin-top:36px;
+      margin-bottom:14px;
+      font-size:1.5rem;
+    }
+    p{margin:0 0 16px}
+    ul{margin:0 0 16px 22px}
+    li{margin-bottom:8px}
+    .callout{
+      border-left:4px solid var(--accent);
+      background:#eff6ff;
+      padding:14px 16px;
+      border-radius:12px;
+      margin:18px 0;
+      color:#1e3a8a;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:16px;
+      margin:20px 0;
+    }
+    .card{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px;
+      background:#fff;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:1rem;
+    }
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{color:var(--accent-dark);text-decoration:underline}
+    footer{
+      margin-top:40px;
+      padding-top:24px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    @media (max-width:640px){
+      .paper{padding:28px}
+      h1{font-size:2rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <article class="paper">
+      <h1>Machine Learning–Based Content Opportunity Scoring for Search Visibility Optimization</h1>
+      <div class="meta">
+        <strong>Author:</strong> Ramya Hegde<br/>
+        FlyRank Machine Learning Internship — Capstone Project
+      </div>
+
+      <section>
+        <h2>Abstract</h2>
+        <p>
+          This project explores whether a tree-based supervised machine learning model can identify
+          high-value content refresh opportunities more effectively than a simple rule-based baseline.
+          Using anonymized search performance telemetry, the workflow builds a repeatable content
+          opportunity scoring pipeline and evaluates it with grouped validation to reduce leakage across
+          related content entities. The resulting model is intended as a decision-support system for SEO
+          and content teams rather than a claim about Google’s ranking algorithm. The outcome is a ranked
+          action framework that helps prioritize pages for refresh, monitoring, or deeper editorial review.
+        </p>
+      </section>
+
+      <section>
+        <h2>Introduction / Problem Statement</h2>
+        <p>
+          Search and content teams often have far more pages than they can realistically refresh. The
+          challenge is deciding which pages are most likely to benefit from optimization work. This project
+          investigates whether machine learning can provide a more consistent prioritization signal than a
+          hand-written heuristic score, helping teams allocate effort toward pages with stronger optimization
+          potential.
+        </p>
+      </section>
+
+      <section>
+        <h2>Data</h2>
+        <p>
+          The analysis uses the anonymized FlyRank ML Internship search-performance dataset. The workflow
+          focuses on aggregated search telemetry and engagement-related signals while excluding identifiers
+          that could expose client information. All analysis is performed on public-safe features derived
+          from the internship dataset, and no client domains, URLs, credentials, or proprietary exports are
+          included in this paper.
+        </p>
+      </section>
+
+      <section>
+        <h2>Methodology</h2>
+        <p>
+          The capstone follows a repeatable machine learning workflow built across the internship notebooks:
+        </p>
+        <ul>
+          <li>Feature preparation from anonymized search and engagement signals.</li>
+          <li>Construction of a baseline heuristic scoring approach.</li>
+          <li>Training of a tree-based supervised model.</li>
+          <li>Grouped cross-validation to reduce leakage across related content entities.</li>
+          <li>Comparison of model performance against the baseline on the same validation design.</li>
+        </ul>
+        <p>
+          The objective is not to predict Google rankings directly, but to generate a practical content
+          opportunity score that can support editorial and SEO decision making.
+        </p>
+      </section>
+
+      <section>
+        <h2>Results</h2>
+        <p>
+          The notebook compares the machine learning model against a heuristic baseline using standard
+          classification metrics on a grouped validation split. The model provides a more informative
+          prioritization signal than the baseline approach and produces ranked content opportunity outputs
+          that can be translated into operational action queues for SEO and content teams.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Modeling approach</h3>
+            <p>Tree-based supervised learning with grouped validation.</p>
+          </div>
+          <div class="card">
+            <h3>Validation</h3>
+            <p>Group-aware cross-validation to reduce leakage across related entities.</p>
+          </div>
+          <div class="card">
+            <h3>Output</h3>
+            <p>Ranked content opportunity scores and action-oriented recommendations.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Limitations</h2>
+        <div class="callout">
+          This project should be interpreted as a decision-support system built on observational search
+          telemetry, not as proof of Google ranking causality.
+        </div>
+        <ul>
+          <li>The analysis is observational rather than causal.</li>
+          <li>Results are specific to the internship dataset and feature engineering choices.</li>
+          <li>The model is intended to prioritize opportunities, not guarantee ranking improvements.</li>
+          <li>Real production deployment would require ongoing monitoring, retraining, and business validation.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Ranked Recommendations</h2>
+        <p>The model outputs can be translated into a practical action framework:</p>
+        <ul>
+          <li><strong>Refresh Now:</strong> High-priority pages showing strong optimization potential.</li>
+          <li><strong>Investigate:</strong> Pages with mixed signals that require manual review.</li>
+          <li><strong>Monitor:</strong> Stable pages that should be tracked before allocating editorial effort.</li>
+          <li><strong>Defer:</strong> Low-impact opportunities that can be scheduled for later review.</li>
+        </ul>
+        <p>
+          This framework is designed to help content teams allocate limited optimization resources more
+          efficiently.
+        </p>
+      </section>
+
+      <section>
+        <h2>Reproducibility</h2>
+        <p>
+          The complete notebook workflow and supporting internship artifacts are available in the public
+          GitHub repository below.
+        </p>
+        <ul>
+          <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks" target="_blank" rel="noreferrer">GitHub Repository</a></li>
+          <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/capstone.ipynb" target="_blank" rel="noreferrer">Capstone Notebook</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Acknowledgments</h2>
+        <p>
+          Built on the <a href="https://flyrank.ai" target="_blank" rel="noreferrer">FlyRank ML Internship dataset</a> and internship learning materials.
+        </p>
+      </section>
+
+      <footer>
+        This page is the deployed research-paper version of my FlyRank Machine Learning Internship capstone.
+      </footer>
+    </article>
+  </div>
+</body>
+</html>

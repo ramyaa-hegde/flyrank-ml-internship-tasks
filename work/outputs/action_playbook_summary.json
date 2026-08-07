@@ -1,0 +1,16 @@
+{
+  "data_window": "April 2026 aggregated scoring snapshot",
+  "scored_items": 107144,
+  "high_risk_threshold": 0.6457,
+  "action_counts": {
+    "INVESTIGATE_HIGH_RISK": 1462,
+    "MONITOR": 96429,
+    "REVIEW_CTR_OPPORTUNITY": 9253
+  },
+  "review_action_rate": 0.0864,
+  "investigate_action_rate": 0.0136,
+  "median_april_impressions": 691.0,
+  "median_model_risk_score": 0.4311,
+  "guardrail": "Recommendations are prioritization labels only; no automated site changes are performed.",
+  "limitations": "This is an observational decision-support summary, not a causal claim that an edit will increase clicks."
+}

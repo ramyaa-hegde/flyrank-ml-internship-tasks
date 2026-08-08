@@ -1,0 +1,25 @@
+{
+  "data_scope": "February 2026 features, March 2026 proxy label, and April 2026 aggregated action scoring",
+  "validation_design": "Grouped pseudonymized-client holdout with 12 held-out clients and zero client overlap",
+  "heldout_metrics": {
+    "precision_at_20": {
+      "february_only_baseline": 0.25,
+      "random_forest": 0.9
+    },
+    "average_precision": {
+      "february_only_baseline": 0.339,
+      "random_forest": 0.584
+    },
+    "roc_auc": {
+      "february_only_baseline": 0.486,
+      "random_forest": 0.73
+    }
+  },
+  "april_action_counts": {
+    "REVIEW_CTR_OPPORTUNITY": 9197,
+    "INVESTIGATE_HIGH_RISK": 1518,
+    "MONITOR": 96429
+  },
+  "guardrail": "Recommendations are decision-support labels only; no automatic site changes are performed.",
+  "limitation": "Results rank an observed position-adjusted CTR proxy and do not establish that an edit will cause more clicks."
+}

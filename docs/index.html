@@ -4,128 +4,102 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Can Historical Search Signals Prioritize CTR Review Opportunities?</title>
+  <meta name="description" content="A public-safe FlyRank ML Internship case study on position-adjusted CTR review opportunities.">
   <style>
     :root {
-      --navy: #102a43;
-      --blue: #2563eb;
       --ink: #172033;
-      --muted: #5f6b7d;
-      --line: #d9e1ea;
-      --panel: #f5f8fc;
+      --muted: #5d6b7c;
+      --navy: #12375a;
+      --blue: #2563eb;
+      --teal: #0f766e;
+      --paper: #ffffff;
+      --wash: #f3f7fb;
+      --line: #dbe4ed;
+      --amber: #a16207;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
       color: var(--ink);
-      font: 16px/1.65 Arial, Helvetica, sans-serif;
+      background: var(--paper);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
     }
-    header {
-      padding: 64px 20px 48px;
-      color: white;
-      background: linear-gradient(135deg, var(--navy), #1d4e89);
-    }
-    .wrap { max-width: 980px; margin: auto; }
-    .eyebrow {
-      color: #bfdbfe;
-      font-size: .82rem;
-      font-weight: bold;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    h1 {
-      max-width: 860px;
-      margin: 12px 0;
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      line-height: 1.12;
-    }
-    h2 { font-size: 1.7rem; line-height: 1.25; margin: 0 0 12px; }
-    p { margin: 0 0 14px; }
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--line);
-      background: white;
-    }
-    nav .wrap { display: flex; flex-wrap: wrap; gap: 16px; }
-    nav a { color: var(--muted); font-size: .9rem; text-decoration: none; }
-    nav a:hover { color: var(--blue); }
-    main { padding: 36px 20px 56px; }
-    section { padding: 30px 0; border-bottom: 1px solid var(--line); }
-    .abstract {
-      margin-top: 24px;
-      padding: 22px;
-      border-left: 5px solid var(--blue);
-      border-radius: 8px;
-      background: #eef5ff;
-      color: var(--ink);
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin: 22px 0;
-    }
-    .card {
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: white;
-    }
-    .card strong {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--blue);
-      font-size: 1.75rem;
-      line-height: 1.1;
-    }
-    .note {
-      margin: 16px 0;
-      padding: 18px;
-      border-radius: 10px;
-      background: var(--panel);
-    }
-    table {
-      width: 100%;
-      margin: 16px 0;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 11px;
-      text-align: left;
-      border-bottom: 1px solid var(--line);
-    }
-    th { background: var(--panel); }
-    .good { color: #166534; font-weight: bold; }
-    figure {
-      margin: 26px 0;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-    }
-    figure img { display: block; width: 100%; height: auto; }
-    figcaption { margin: 12px 4px 2px; color: var(--muted); font-size: .94rem; }
-    li { margin-bottom: 8px; }
     a { color: #1d4ed8; }
-    footer { padding: 34px 20px; color: white; background: var(--navy); }
-    footer a { color: #bfdbfe; }
-    @media (max-width: 700px) {
-      .grid { grid-template-columns: 1fr; }
-      header { padding-top: 46px; }
-      table { font-size: .86rem; }
+    .wrap { width: min(1060px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar { border-bottom: 1px solid #284e70; background: var(--navy); color: #e8f2ff; }
+    .topbar .wrap { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; font-size: .87rem; }
+    .topbar strong { letter-spacing: .02em; }
+    .hero { padding: 68px 0 54px; background: linear-gradient(125deg, #12375a 0%, #174d7d 100%); color: #fff; }
+    .kicker { margin: 0 0 15px; color: #bfdbfe; font-size: .78rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { max-width: 860px; margin: 0; font-size: clamp(2.3rem, 5vw, 4rem); line-height: 1.1; letter-spacing: -.035em; }
+    .subtitle { max-width: 700px; margin: 20px 0 0; color: #dcecff; font-size: 1.16rem; }
+    .abstract { max-width: 900px; margin-top: 35px; padding: 25px 28px; border-radius: 12px; background: #fff; color: var(--ink); box-shadow: 0 10px 30px rgba(5, 22, 40, .17); }
+    .abstract h2 { margin: 0 0 8px; font-size: 1.1rem; }
+    .abstract p { margin: 0; }
+    nav { border-bottom: 1px solid var(--line); background: #fff; }
+    nav .wrap { display: flex; flex-wrap: wrap; gap: 18px; padding: 13px 0; }
+    nav a { color: var(--muted); font-size: .88rem; text-decoration: none; }
+    nav a:hover { color: var(--blue); }
+    main { padding: 18px 0 70px; }
+    section { padding: 58px 0; border-bottom: 1px solid var(--line); }
+    .section-label { margin-bottom: 7px; color: var(--teal); font-size: .78rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+    h2 { margin: 0 0 14px; font-size: clamp(1.6rem, 3vw, 2.15rem); line-height: 1.2; letter-spacing: -.02em; }
+    h3 { margin: 0 0 6px; font-size: 1rem; }
+    p { margin: 0 0 14px; }
+    .lede { max-width: 780px; color: #334155; font-size: 1.05rem; }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0 4px; }
+    .metric { padding: 19px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+    .metric .value { display: block; color: var(--blue); font-size: 2rem; font-weight: 700; line-height: 1.1; }
+    .metric .label { display: block; margin-top: 7px; color: var(--muted); font-size: .88rem; }
+    .callout { margin: 22px 0; padding: 19px 21px; border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0; background: var(--wash); }
+    .callout p { margin: 0; }
+    .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 28px 0; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; }
+    .flow-step { position: relative; min-height: 150px; padding: 22px; background: #fff; }
+    .flow-step + .flow-step { border-left: 1px solid var(--line); }
+    .flow-step .month { color: var(--teal); font-size: .79rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .flow-step p { margin: 6px 0 0; color: var(--muted); font-size: .92rem; }
+    table { width: 100%; margin: 20px 0; border-collapse: collapse; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: var(--wash); font-size: .88rem; }
+    tr:last-child td { border-bottom: 0; }
+    .positive { color: #166534; font-weight: 700; }
+    figure { margin: 26px 0 4px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    figure img { display: block; width: 100%; height: auto; }
+    figcaption { margin-top: 14px; color: var(--muted); font-size: .92rem; }
+    .two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .card { padding: 21px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .card p { margin: 0; color: var(--muted); }
+    ul { padding-left: 21px; }
+    li { margin: 9px 0; }
+    .small { color: var(--muted); font-size: .91rem; }
+    footer { padding: 38px 0; background: var(--navy); color: #e8f2ff; }
+    footer p { margin: 5px 0 0; color: #bfdbfe; }
+    footer a { color: #dbeafe; }
+    @media (max-width: 740px) {
+      .topbar .wrap { display: block; }
+      .topbar .wrap span { display: block; margin-top: 3px; }
+      .hero { padding: 48px 0 42px; }
+      .metrics, .two-col, .flow { grid-template-columns: 1fr; }
+      .flow-step + .flow-step { border-top: 1px solid var(--line); border-left: 0; }
+      .abstract { padding: 21px; }
+      table { font-size: .85rem; }
+      th, td { padding: 10px; }
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="wrap">
-      <div class="eyebrow">FlyRank ML Internship · Public-Safe Research Case Study</div>
-      <h1>Can Historical Search Signals Prioritize CTR Review Opportunities?</h1>
-      <p>Using February features to rank March position-adjusted CTR opportunities and produce an April human-review playbook.</p>
+  <div class="topbar">
+    <div class="wrap"><strong>FlyRank ML Internship</strong><span>Public-safe research case study · 2026</span></div>
+  </div>
 
+  <header class="hero">
+    <div class="wrap">
+      <p class="kicker">Google Search Ranking & Discoverability Capstone</p>
+      <h1>Can historical search signals prioritize CTR review opportunities?</h1>
+      <p class="subtitle">A clear, reproducible workflow that uses February signals to rank observed March position-adjusted CTR opportunities and support April human review.</p>
       <div class="abstract">
         <h2>Abstract</h2>
         <p>This case study asks whether historical aggregate search signals can help content teams prioritize pages for CTR review. I used public-safe, pseudonymized daily performance data from the FlyRank ML Internship dataset, with February features, a March position-adjusted CTR proxy label, and April action scoring. A Random Forest model was evaluated against a transparent February-only heuristic using a grouped pseudonymized-client holdout. On the same held-out clients, the model achieved Precision@20 of 0.900 versus 0.250 for the baseline, with Average Precision of 0.584 versus 0.339 and ROC-AUC of 0.730 versus 0.486. These measured results support a human-review queue for observed CTR opportunities; they do not establish that changing a title, snippet, or page will cause more clicks.</p>
@@ -133,137 +107,111 @@
     </div>
   </header>
 
-  <nav>
+  <nav aria-label="Research paper navigation">
     <div class="wrap">
-      <a href="#problem">Problem</a>
-      <a href="#data">Data</a>
-      <a href="#method">Method</a>
-      <a href="#results">Results</a>
-      <a href="#limits">Limitations</a>
-      <a href="#recommendations">Recommendations</a>
-      <a href="#reproducibility">Reproducibility</a>
+      <a href="#problem">Problem</a><a href="#data">Data</a><a href="#method">Method</a><a href="#results">Results</a><a href="#limits">Limitations</a><a href="#recommendations">Recommendations</a><a href="#reproducibility">Reproducibility</a>
     </div>
   </nav>
 
   <main class="wrap">
     <section id="problem">
-      <div class="eyebrow">1 · Introduction / Problem</div>
-      <h2>A content-review decision, not a ranking-algorithm claim</h2>
-      <p>Content teams have limited time to review titles, snippets, and pages. The practical FlyRank case-study question is therefore: which already-visible pseudonymized content items should receive human CTR review first?</p>
-      <p>The decision supported here is prioritization. An item is not “bad” merely because its CTR is low: expected click-through rate depends strongly on its search-position tier. This work compares each item with an observed benchmark for comparable positions and ranks the largest observed gaps for human review.</p>
+      <div class="section-label">01 · Introduction / Problem</div>
+      <h2>Help content teams decide where to look first</h2>
+      <p class="lede">A team cannot manually inspect every visible page. This case study supports a narrower decision: which pseudonymized content items should move to the top of a human CTR-review queue?</p>
+      <div class="two-col">
+        <div class="card"><h3>The challenge</h3><p>A low CTR does not automatically indicate a problem. Expected click-through rate varies with search position, so comparisons should be made within a comparable position tier.</p></div>
+        <div class="card"><h3>The decision supported</h3><p>Rank observed CTR gaps for human review. The output is prioritization, not an automated recommendation to edit a page.</p></div>
+      </div>
     </section>
 
     <section id="data">
-      <div class="eyebrow">2 · Data</div>
+      <div class="section-label">02 · Data</div>
       <h2>Public-safe warehouse scope</h2>
-      <p>The analysis streams aggregate daily records from FlyRank’s internship warehouse table, <code>fact_content_daily_performance</code>, without downloading the full release. Pseudonymized identifiers are used only for grouping and validation, never as model features.</p>
-
+      <p class="lede">The analysis streams aggregate daily records from FlyRank's internship warehouse table, <code>fact_content_daily_performance</code>, rather than downloading the full release. Pseudonymized identifiers are used only for grouping and validation.</p>
       <table>
-        <thead>
-          <tr>
-            <th>Window</th>
-            <th>Purpose</th>
-            <th>Daily records</th>
-            <th>Pseudonymized clients</th>
-            <th>Pseudonymized content items</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Window</th><th>Purpose</th><th>Daily records</th><th>Pseudonymized clients</th><th>Pseudonymized content items</th></tr></thead>
         <tbody>
           <tr><td>February 2026</td><td>Predictor features</td><td>7,355,108</td><td>54</td><td>321,546</td></tr>
           <tr><td>March 2026</td><td>Position-adjusted CTR proxy label</td><td>9,841,378</td><td>55</td><td>331,437</td></tr>
           <tr><td>April 2026</td><td>Action-playbook scoring</td><td>10,424,730</td><td>61</td><td>362,172</td></tr>
         </tbody>
       </table>
-
-      <p>Raw URLs, titles, queries, client names, credentials, row-level recommendations, March outcome fields, and product/action flags were excluded from the published work. Only aggregate public-safe statistics and charts are shown.</p>
+      <p class="small">The public paper excludes raw URLs, page titles, queries, client names, credentials, row-level recommendations, target-derived fields, and product/action flags.</p>
     </section>
 
     <section id="method">
-      <div class="eyebrow">3 · Methodology</div>
-      <h2>February inputs, March proxy label, grouped validation</h2>
-      <p>The model uses only February aggregate inputs available before the March outcome window: impressions, average position, scroll events, social sessions, observed-day coverage, GA4 availability, and a February position bucket. Missing numeric values use median imputation with missingness indicators; the position bucket uses categorical imputation and one-hot encoding.</p>
-
-      <div class="note">
-        <strong>Outcome proxy:</strong> The March label is whether an eligible item’s observed March CTR was below the median CTR of comparable items in its own March position bucket. This is a position-adjusted observed review signal, not a direct measure of business impact or an intervention effect.
+      <div class="section-label">03 · Methodology</div>
+      <h2>One simple time order: February → March → April</h2>
+      <p class="lede">The time order makes the question easier to explain: learn from February, evaluate against an observed March proxy, then create an April decision-support queue.</p>
+      <div class="flow">
+        <div class="flow-step"><div class="month">February</div><h3>Features</h3><p>Impressions, average position, engagement signals, observed-day coverage, GA4 availability, and position bucket.</p></div>
+        <div class="flow-step"><div class="month">March</div><h3>Observed proxy label</h3><p>Whether CTR is below the median CTR of comparable items in the same position bucket.</p></div>
+        <div class="flow-step"><div class="month">April</div><h3>Human-review labels</h3><p>Review, investigate, or monitor. No site or content change is automated.</p></div>
       </div>
-
-      <p>The transparent baseline ranks February items in positions 4–20 by February impression volume. The Random Forest and baseline are compared on the same grouped pseudonymized-client holdout: 73,481 eligible February-to-March items, 12 held-out clients, and zero client overlap between training and validation.</p>
-      <p>Leakage checks excluded identifiers, March outcome fields, future-window fields, product flags, action labels, and target-derived columns from the feature vector. A deliberate copied-label test reached perfect performance and was removed; the final reported result uses only the honest feature vector.</p>
+      <div class="callout"><p><strong>Validation and leakage controls.</strong> The Random Forest and the February-only baseline are evaluated on the same grouped pseudonymized-client holdout. The final validation has 12 held-out clients and zero client overlap. Identifiers, March outcome fields, future-window fields, product flags, action labels, and target-derived columns are excluded from model inputs.</p></div>
+      <p>The transparent baseline ranks February items in positions 4–20 by February impression volume. The model uses median imputation with missingness indicators for numeric fields and one-hot encoding for the February position bucket.</p>
     </section>
 
     <section id="results">
-      <div class="eyebrow">4 · Results</div>
-      <h2>The model ranks the proxy label more effectively than the heuristic</h2>
-
-      <div class="grid">
-        <div class="card"><strong>0.900</strong>Random Forest Precision@20</div>
-        <div class="card"><strong>0.250</strong>February-only baseline Precision@20</div>
-        <div class="card"><strong>12</strong>Held-out pseudonymized clients</div>
+      <div class="section-label">04 · Results</div>
+      <h2>Measured on the same held-out clients</h2>
+      <p class="lede">The main question is not whether the model has a high score in isolation. It is whether it places more observed below-benchmark CTR items near the top of a small review queue than a transparent baseline does.</p>
+      <div class="metrics">
+        <div class="metric"><span class="value">0.900</span><span class="label">Random Forest Precision@20</span></div>
+        <div class="metric"><span class="value">0.250</span><span class="label">February-only baseline Precision@20</span></div>
+        <div class="metric"><span class="value">12</span><span class="label">Held-out pseudonymized clients</span></div>
       </div>
-
       <table>
-        <thead>
-          <tr>
-            <th>Held-out metric</th>
-            <th>February-only baseline</th>
-            <th>Random Forest</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Held-out metric</th><th>February-only baseline</th><th>Random Forest</th></tr></thead>
         <tbody>
-          <tr><td>Precision@20</td><td>0.250</td><td class="good">0.900</td></tr>
-          <tr><td>Average Precision</td><td>0.339</td><td class="good">0.584</td></tr>
-          <tr><td>ROC-AUC</td><td>0.486</td><td class="good">0.730</td></tr>
+          <tr><td>Precision@20</td><td>0.250</td><td class="positive">0.900</td></tr>
+          <tr><td>Average Precision</td><td>0.339</td><td class="positive">0.584</td></tr>
+          <tr><td>ROC-AUC</td><td>0.486</td><td class="positive">0.730</td></tr>
         </tbody>
       </table>
-
       <figure>
-        <img src="assets/model_vs_baseline.svg" alt="Bar chart comparing held-out performance of the February-only baseline and Random Forest model">
-        <figcaption><strong>Takeaway:</strong> On the same held-out clients, the Random Forest places substantially more observed below-benchmark CTR items near the top of a small review queue than the February-only heuristic.</figcaption>
+        <img src="assets/model_vs_baseline.svg" alt="Bar chart comparing the held-out results of the February-only baseline and Random Forest model">
+        <figcaption><strong>How to read this chart:</strong> on the same held-out clients, the Random Forest places more observed below-benchmark CTR items near the top of a short human-review queue than the February-only heuristic.</figcaption>
       </figure>
     </section>
 
     <section id="limits">
-      <div class="eyebrow">5 · Limitations & Honest Framing</div>
-      <h2>What this work cannot claim</h2>
+      <div class="section-label">05 · Limitations & Honest Framing</div>
+      <h2>What the result does—and does not—support</h2>
+      <div class="two-col">
+        <div class="card"><h3>What it supports</h3><p>Observed, position-adjusted ranking of items for human CTR review on held-out pseudonymized clients.</p></div>
+        <div class="card"><h3>What it does not support</h3><p>A claim that a title, snippet, or page edit will cause more clicks, or a claim about Google's proprietary ranking algorithm.</p></div>
+      </div>
       <ul>
-        <li><strong>Observational, not causal:</strong> the model ranks observed historical patterns; it does not show that an edit will cause more clicks.</li>
-        <li><strong>Proxy outcome:</strong> below-benchmark CTR within a comparable position bucket is a prioritization proxy, not a direct measure of business impact or user satisfaction.</li>
-        <li><strong>Outcome-window selection:</strong> March availability and the eligibility rule are outcome-window choices and must be disclosed when interpreting the result.</li>
-        <li><strong>Coverage:</strong> performance may differ for other clients, periods, query mixes, seasonal conditions, and search-result layouts.</li>
-        <li><strong>Human review required:</strong> no site, title, metadata, URL, publishing, or deletion change is automated.</li>
+        <li>The March label is a position-adjusted CTR proxy, not direct business impact or user satisfaction.</li>
+        <li>March availability and the eligibility rule are outcome-window choices and must be considered when interpreting the results.</li>
+        <li>Performance may vary across future periods, other clients, query mixes, seasonality, and search-result layouts.</li>
+        <li>Human review remains required for every review or investigation label.</li>
       </ul>
     </section>
 
     <section id="recommendations">
-      <div class="eyebrow">6 · Ranked Recommendations</div>
-      <h2>April action playbook</h2>
-      <p>The February-to-March model was applied to eligible aggregated April 2026 items. Its output is a decision-support label rather than an instruction to change a page automatically.</p>
-
+      <div class="section-label">06 · Ranked Recommendations</div>
+      <h2>April action-playbook summary</h2>
+      <p class="lede">The February-to-March model was applied to eligible aggregated April 2026 items. All outputs are decision-support labels and require human judgment.</p>
       <table>
-        <thead>
-          <tr>
-            <th>Action label</th>
-            <th>April aggregate items</th>
-            <th>Human action</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Action label</th><th>April aggregate items</th><th>What a person does next</th></tr></thead>
         <tbody>
           <tr><td>REVIEW_CTR_OPPORTUNITY</td><td>9,197</td><td>Review snippet, intent, and the observed CTR opportunity before proposing a change.</td></tr>
           <tr><td>INVESTIGATE_HIGH_RISK</td><td>1,518</td><td>Diagnose further before deciding whether intervention is appropriate.</td></tr>
           <tr><td>MONITOR</td><td>96,429</td><td>Retain for monitoring; no current intervention is prioritized.</td></tr>
         </tbody>
       </table>
-
       <figure>
-        <img src="assets/action_playbook_distribution.svg" alt="Bar chart showing April action-playbook item counts">
-        <figcaption><strong>Takeaway:</strong> The review queue is intentionally smaller than the scored population, so human attention is directed toward the most relevant observed opportunities first.</figcaption>
+        <img src="assets/action_playbook_distribution.svg" alt="Bar chart showing April action-playbook aggregate item counts">
+        <figcaption><strong>How to read this chart:</strong> the review queue is intentionally smaller than the scored population so that human attention is directed toward the most relevant observed opportunities first.</figcaption>
       </figure>
     </section>
 
     <section id="reproducibility">
-      <div class="eyebrow">7 · Reproducibility</div>
-      <h2>How to inspect or rerun the work</h2>
-      <p>The full analysis, public-safe aggregate artifacts, and notebooks are available in the public repository.</p>
+      <div class="section-label">07 · Reproducibility</div>
+      <h2>Inspect the complete workflow</h2>
+      <p class="lede">The notebooks, aggregate artifacts, and fixed-seed workflow are available in the public repository. The published materials contain no raw or row-level dataset export.</p>
       <ul>
         <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks">Repository</a></li>
         <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/capstone.ipynb">Capstone notebook</a></li>
@@ -271,21 +219,18 @@
         <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/w06_validation_audit.ipynb">Validation and claim audit</a></li>
         <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/w07_action_playbook.ipynb">April action playbook</a></li>
       </ul>
-      <p>The workflow uses fixed random seeds and grouped pseudonymized-client validation. This page intentionally contains no raw or row-level dataset export.</p>
     </section>
 
     <section id="acknowledgments">
-      <div class="eyebrow">8 · Acknowledgments & Data Credit</div>
+      <div class="section-label">08 · Acknowledgments & Data Credit</div>
       <h2>Data credit</h2>
       <p><a href="https://flyrank.ai">Built on the FlyRank ML Internship dataset</a>.</p>
     </section>
   </main>
 
   <footer>
-    <div class="wrap">
-      <strong>Public-safe research artifact</strong>
-      <p>Observed · measured · directional · decision-support.</p>
-    </div>
+    <div class="wrap"><strong>Public-safe research artifact</strong><p>Observed · measured · directional · decision-support.</p></div>
   </footer>
 </body>
 </html>
+

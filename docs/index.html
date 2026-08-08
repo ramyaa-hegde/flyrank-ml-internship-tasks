@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Can Historical Search Signals Prioritize CTR Review Opportunities?</title>
+  <style>
+    :root {
+      --navy: #102a43;
+      --blue: #2563eb;
+      --ink: #172033;
+      --muted: #5f6b7d;
+      --line: #d9e1ea;
+      --panel: #f5f8fc;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font: 16px/1.65 Arial, Helvetica, sans-serif;
+    }
+    header {
+      padding: 64px 20px 48px;
+      color: white;
+      background: linear-gradient(135deg, var(--navy), #1d4e89);
+    }
+    .wrap { max-width: 980px; margin: auto; }
+    .eyebrow {
+      color: #bfdbfe;
+      font-size: .82rem;
+      font-weight: bold;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 860px;
+      margin: 12px 0;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.12;
+    }
+    h2 { font-size: 1.7rem; line-height: 1.25; margin: 0 0 12px; }
+    p { margin: 0 0 14px; }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--line);
+      background: white;
+    }
+    nav .wrap { display: flex; flex-wrap: wrap; gap: 16px; }
+    nav a { color: var(--muted); font-size: .9rem; text-decoration: none; }
+    nav a:hover { color: var(--blue); }
+    main { padding: 36px 20px 56px; }
+    section { padding: 30px 0; border-bottom: 1px solid var(--line); }
+    .abstract {
+      margin-top: 24px;
+      padding: 22px;
+      border-left: 5px solid var(--blue);
+      border-radius: 8px;
+      background: #eef5ff;
+      color: var(--ink);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 22px 0;
+    }
+    .card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+    }
+    .card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--blue);
+      font-size: 1.75rem;
+      line-height: 1.1;
+    }
+    .note {
+      margin: 16px 0;
+      padding: 18px;
+      border-radius: 10px;
+      background: var(--panel);
+    }
+    table {
+      width: 100%;
+      margin: 16px 0;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 11px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+    th { background: var(--panel); }
+    .good { color: #166534; font-weight: bold; }
+    figure {
+      margin: 26px 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    figure img { display: block; width: 100%; height: auto; }
+    figcaption { margin: 12px 4px 2px; color: var(--muted); font-size: .94rem; }
+    li { margin-bottom: 8px; }
+    a { color: #1d4ed8; }
+    footer { padding: 34px 20px; color: white; background: var(--navy); }
+    footer a { color: #bfdbfe; }
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; }
+      header { padding-top: 46px; }
+      table { font-size: .86rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">FlyRank ML Internship · Public-Safe Research Case Study</div>
+      <h1>Can Historical Search Signals Prioritize CTR Review Opportunities?</h1>
+      <p>Using February features to rank March position-adjusted CTR opportunities and produce an April human-review playbook.</p>
+
+      <div class="abstract">
+        <h2>Abstract</h2>
+        <p>This case study asks whether historical aggregate search signals can help content teams prioritize pages for CTR review. I used public-safe, pseudonymized daily performance data from the FlyRank ML Internship dataset, with February features, a March position-adjusted CTR proxy label, and April action scoring. A Random Forest model was evaluated against a transparent February-only heuristic using a grouped pseudonymized-client holdout. On the same held-out clients, the model achieved Precision@20 of 0.900 versus 0.250 for the baseline, with Average Precision of 0.584 versus 0.339 and ROC-AUC of 0.730 versus 0.486. These measured results support a human-review queue for observed CTR opportunities; they do not establish that changing a title, snippet, or page will cause more clicks.</p>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="wrap">
+      <a href="#problem">Problem</a>
+      <a href="#data">Data</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#limits">Limitations</a>
+      <a href="#recommendations">Recommendations</a>
+      <a href="#reproducibility">Reproducibility</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <section id="problem">
+      <div class="eyebrow">1 · Introduction / Problem</div>
+      <h2>A content-review decision, not a ranking-algorithm claim</h2>
+      <p>Content teams have limited time to review titles, snippets, and pages. The practical FlyRank case-study question is therefore: which already-visible pseudonymized content items should receive human CTR review first?</p>
+      <p>The decision supported here is prioritization. An item is not “bad” merely because its CTR is low: expected click-through rate depends strongly on its search-position tier. This work compares each item with an observed benchmark for comparable positions and ranks the largest observed gaps for human review.</p>
+    </section>
+
+    <section id="data">
+      <div class="eyebrow">2 · Data</div>
+      <h2>Public-safe warehouse scope</h2>
+      <p>The analysis streams aggregate daily records from FlyRank’s internship warehouse table, <code>fact_content_daily_performance</code>, without downloading the full release. Pseudonymized identifiers are used only for grouping and validation, never as model features.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Window</th>
+            <th>Purpose</th>
+            <th>Daily records</th>
+            <th>Pseudonymized clients</th>
+            <th>Pseudonymized content items</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>February 2026</td><td>Predictor features</td><td>7,355,108</td><td>54</td><td>321,546</td></tr>
+          <tr><td>March 2026</td><td>Position-adjusted CTR proxy label</td><td>9,841,378</td><td>55</td><td>331,437</td></tr>
+          <tr><td>April 2026</td><td>Action-playbook scoring</td><td>10,424,730</td><td>61</td><td>362,172</td></tr>
+        </tbody>
+      </table>
+
+      <p>Raw URLs, titles, queries, client names, credentials, row-level recommendations, March outcome fields, and product/action flags were excluded from the published work. Only aggregate public-safe statistics and charts are shown.</p>
+    </section>
+
+    <section id="method">
+      <div class="eyebrow">3 · Methodology</div>
+      <h2>February inputs, March proxy label, grouped validation</h2>
+      <p>The model uses only February aggregate inputs available before the March outcome window: impressions, average position, scroll events, social sessions, observed-day coverage, GA4 availability, and a February position bucket. Missing numeric values use median imputation with missingness indicators; the position bucket uses categorical imputation and one-hot encoding.</p>
+
+      <div class="note">
+        <strong>Outcome proxy:</strong> The March label is whether an eligible item’s observed March CTR was below the median CTR of comparable items in its own March position bucket. This is a position-adjusted observed review signal, not a direct measure of business impact or an intervention effect.
+      </div>
+
+      <p>The transparent baseline ranks February items in positions 4–20 by February impression volume. The Random Forest and baseline are compared on the same grouped pseudonymized-client holdout: 73,481 eligible February-to-March items, 12 held-out clients, and zero client overlap between training and validation.</p>
+      <p>Leakage checks excluded identifiers, March outcome fields, future-window fields, product flags, action labels, and target-derived columns from the feature vector. A deliberate copied-label test reached perfect performance and was removed; the final reported result uses only the honest feature vector.</p>
+    </section>
+
+    <section id="results">
+      <div class="eyebrow">4 · Results</div>
+      <h2>The model ranks the proxy label more effectively than the heuristic</h2>
+
+      <div class="grid">
+        <div class="card"><strong>0.900</strong>Random Forest Precision@20</div>
+        <div class="card"><strong>0.250</strong>February-only baseline Precision@20</div>
+        <div class="card"><strong>12</strong>Held-out pseudonymized clients</div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Held-out metric</th>
+            <th>February-only baseline</th>
+            <th>Random Forest</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Precision@20</td><td>0.250</td><td class="good">0.900</td></tr>
+          <tr><td>Average Precision</td><td>0.339</td><td class="good">0.584</td></tr>
+          <tr><td>ROC-AUC</td><td>0.486</td><td class="good">0.730</td></tr>
+        </tbody>
+      </table>
+
+      <figure>
+        <img src="assets/model_vs_baseline.svg" alt="Bar chart comparing held-out performance of the February-only baseline and Random Forest model">
+        <figcaption><strong>Takeaway:</strong> On the same held-out clients, the Random Forest places substantially more observed below-benchmark CTR items near the top of a small review queue than the February-only heuristic.</figcaption>
+      </figure>
+    </section>
+
+    <section id="limits">
+      <div class="eyebrow">5 · Limitations & Honest Framing</div>
+      <h2>What this work cannot claim</h2>
+      <ul>
+        <li><strong>Observational, not causal:</strong> the model ranks observed historical patterns; it does not show that an edit will cause more clicks.</li>
+        <li><strong>Proxy outcome:</strong> below-benchmark CTR within a comparable position bucket is a prioritization proxy, not a direct measure of business impact or user satisfaction.</li>
+        <li><strong>Outcome-window selection:</strong> March availability and the eligibility rule are outcome-window choices and must be disclosed when interpreting the result.</li>
+        <li><strong>Coverage:</strong> performance may differ for other clients, periods, query mixes, seasonal conditions, and search-result layouts.</li>
+        <li><strong>Human review required:</strong> no site, title, metadata, URL, publishing, or deletion change is automated.</li>
+      </ul>
+    </section>
+
+    <section id="recommendations">
+      <div class="eyebrow">6 · Ranked Recommendations</div>
+      <h2>April action playbook</h2>
+      <p>The February-to-March model was applied to eligible aggregated April 2026 items. Its output is a decision-support label rather than an instruction to change a page automatically.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Action label</th>
+            <th>April aggregate items</th>
+            <th>Human action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>REVIEW_CTR_OPPORTUNITY</td><td>9,197</td><td>Review snippet, intent, and the observed CTR opportunity before proposing a change.</td></tr>
+          <tr><td>INVESTIGATE_HIGH_RISK</td><td>1,518</td><td>Diagnose further before deciding whether intervention is appropriate.</td></tr>
+          <tr><td>MONITOR</td><td>96,429</td><td>Retain for monitoring; no current intervention is prioritized.</td></tr>
+        </tbody>
+      </table>
+
+      <figure>
+        <img src="assets/action_playbook_distribution.svg" alt="Bar chart showing April action-playbook item counts">
+        <figcaption><strong>Takeaway:</strong> The review queue is intentionally smaller than the scored population, so human attention is directed toward the most relevant observed opportunities first.</figcaption>
+      </figure>
+    </section>
+
+    <section id="reproducibility">
+      <div class="eyebrow">7 · Reproducibility</div>
+      <h2>How to inspect or rerun the work</h2>
+      <p>The full analysis, public-safe aggregate artifacts, and notebooks are available in the public repository.</p>
+      <ul>
+        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks">Repository</a></li>
+        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/capstone.ipynb">Capstone notebook</a></li>
+        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/w05_model.ipynb">Model comparison notebook</a></li>
+        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/w06_validation_audit.ipynb">Validation and claim audit</a></li>
+        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/w07_action_playbook.ipynb">April action playbook</a></li>
+      </ul>
+      <p>The workflow uses fixed random seeds and grouped pseudonymized-client validation. This page intentionally contains no raw or row-level dataset export.</p>
+    </section>
+
+    <section id="acknowledgments">
+      <div class="eyebrow">8 · Acknowledgments & Data Credit</div>
+      <h2>Data credit</h2>
+      <p><a href="https://flyrank.ai">Built on the FlyRank ML Internship dataset</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <strong>Public-safe research artifact</strong>
+      <p>Observed · measured · directional · decision-support.</p>
+    </div>
+  </footer>
+</body>
+</html>

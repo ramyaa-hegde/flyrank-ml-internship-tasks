@@ -1,236 +1,33 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Can Historical Search Signals Prioritize CTR Review Opportunities?</title>
-  <meta name="description" content="A public-safe FlyRank ML Internship case study on position-adjusted CTR review opportunities.">
-  <style>
-    :root {
-      --ink: #172033;
-      --muted: #5d6b7c;
-      --navy: #12375a;
-      --blue: #2563eb;
-      --teal: #0f766e;
-      --paper: #ffffff;
-      --wash: #f3f7fb;
-      --line: #dbe4ed;
-      --amber: #a16207;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 16px;
-      line-height: 1.65;
-    }
-    a { color: #1d4ed8; }
-    .wrap { width: min(1060px, calc(100% - 40px)); margin: 0 auto; }
-    .topbar { border-bottom: 1px solid #284e70; background: var(--navy); color: #e8f2ff; }
-    .topbar .wrap { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; font-size: .87rem; }
-    .topbar strong { letter-spacing: .02em; }
-    .hero { padding: 68px 0 54px; background: linear-gradient(125deg, #12375a 0%, #174d7d 100%); color: #fff; }
-    .kicker { margin: 0 0 15px; color: #bfdbfe; font-size: .78rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
-    h1 { max-width: 860px; margin: 0; font-size: clamp(2.3rem, 5vw, 4rem); line-height: 1.1; letter-spacing: -.035em; }
-    .subtitle { max-width: 700px; margin: 20px 0 0; color: #dcecff; font-size: 1.16rem; }
-    .abstract { max-width: 900px; margin-top: 35px; padding: 25px 28px; border-radius: 12px; background: #fff; color: var(--ink); box-shadow: 0 10px 30px rgba(5, 22, 40, .17); }
-    .abstract h2 { margin: 0 0 8px; font-size: 1.1rem; }
-    .abstract p { margin: 0; }
-    nav { border-bottom: 1px solid var(--line); background: #fff; }
-    nav .wrap { display: flex; flex-wrap: wrap; gap: 18px; padding: 13px 0; }
-    nav a { color: var(--muted); font-size: .88rem; text-decoration: none; }
-    nav a:hover { color: var(--blue); }
-    main { padding: 18px 0 70px; }
-    section { padding: 58px 0; border-bottom: 1px solid var(--line); }
-    .section-label { margin-bottom: 7px; color: var(--teal); font-size: .78rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
-    h2 { margin: 0 0 14px; font-size: clamp(1.6rem, 3vw, 2.15rem); line-height: 1.2; letter-spacing: -.02em; }
-    h3 { margin: 0 0 6px; font-size: 1rem; }
-    p { margin: 0 0 14px; }
-    .lede { max-width: 780px; color: #334155; font-size: 1.05rem; }
-    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0 4px; }
-    .metric { padding: 19px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
-    .metric .value { display: block; color: var(--blue); font-size: 2rem; font-weight: 700; line-height: 1.1; }
-    .metric .label { display: block; margin-top: 7px; color: var(--muted); font-size: .88rem; }
-    .callout { margin: 22px 0; padding: 19px 21px; border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0; background: var(--wash); }
-    .callout p { margin: 0; }
-    .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 28px 0; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; }
-    .flow-step { position: relative; min-height: 150px; padding: 22px; background: #fff; }
-    .flow-step + .flow-step { border-left: 1px solid var(--line); }
-    .flow-step .month { color: var(--teal); font-size: .79rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-    .flow-step p { margin: 6px 0 0; color: var(--muted); font-size: .92rem; }
-    table { width: 100%; margin: 20px 0; border-collapse: collapse; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; }
-    th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-    th { background: var(--wash); font-size: .88rem; }
-    tr:last-child td { border-bottom: 0; }
-    .positive { color: #166534; font-weight: 700; }
-    figure { margin: 26px 0 4px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
-    figure img { display: block; width: 100%; height: auto; }
-    figcaption { margin-top: 14px; color: var(--muted); font-size: .92rem; }
-    .two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .card { padding: 21px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
-    .card p { margin: 0; color: var(--muted); }
-    ul { padding-left: 21px; }
-    li { margin: 9px 0; }
-    .small { color: var(--muted); font-size: .91rem; }
-    footer { padding: 38px 0; background: var(--navy); color: #e8f2ff; }
-    footer p { margin: 5px 0 0; color: #bfdbfe; }
-    footer a { color: #dbeafe; }
-    @media (max-width: 740px) {
-      .topbar .wrap { display: block; }
-      .topbar .wrap span { display: block; margin-top: 3px; }
-      .hero { padding: 48px 0 42px; }
-      .metrics, .two-col, .flow { grid-template-columns: 1fr; }
-      .flow-step + .flow-step { border-top: 1px solid var(--line); border-left: 0; }
-      .abstract { padding: 21px; }
-      table { font-size: .85rem; }
-      th, td { padding: 10px; }
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Google Search Ranking &amp; Discoverability Capstone | Ramya Hegde</title>
+  <meta name="description" content="Ramya Hegde's leakage-aware machine learning capstone for prioritizing content CTR review opportunities." />
+  <style>:root{--ink:#071a35;--panel:#0b2345;--paper:#f7faff;--white:#ffffff;--muted:#9fb2c8;--line:#d8e3f0;--teal:#2563eb;--lime:#22d3ee;--blue:#2563eb;--orange:#f59e0b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--white);font-family:var(--font-sans),Arial,sans-serif}a{color:inherit;text-decoration:none}p{line-height:1.7}.site-header{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,5vw);border-bottom:1px solid #243140;position:relative;z-index:2}.brand{display:flex;align-items:center;gap:12px;font-weight:700}.brand>span{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--teal);border-radius:50%;color:var(--teal);font-family:var(--font-mono);font-size:13px}.brand div{display:flex;flex-direction:column;line-height:1.15}.brand small{font-weight:400;color:var(--muted);font-size:11px;margin-top:5px}.header-links{display:flex;gap:22px;align-items:center;font-size:13px}.button{display:inline-flex;align-items:center;justify-content:center;gap:28px;background:var(--teal);color:#05120f;padding:15px 20px;border-radius:4px;font-weight:750;font-size:14px}.button.small{padding:10px 14px}.button.outline{background:transparent;border:1px solid #a9b2aa;color:var(--ink)}.hero{min-height:680px;padding:100px max(24px,8vw) 0;background:radial-gradient(circle at 84% 18%,rgba(33,212,187,.12),transparent 27%),linear-gradient(135deg,#071019,#091523);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:7%;top:90px;width:330px;height:330px;border:1px solid #1c4450;border-radius:50%;box-shadow:0 0 0 70px rgba(18,53,65,.16),0 0 0 140px rgba(18,53,65,.09);pointer-events:none}.eyebrow{font-family:var(--font-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--teal);font-size:11px;display:flex;align-items:center;gap:10px}.eyebrow span{width:8px;height:8px;background:var(--teal);border-radius:50%}.hero h1{font-size:clamp(48px,7.2vw,104px);line-height:.94;letter-spacing:-.06em;margin:35px 0 30px;max-width:1000px;position:relative;z-index:1}.hero h1 em{font-weight:350;color:#9fb1bd;font-style:normal}.hero-copy{font-size:18px;max-width:700px;color:#aebbc5;margin-bottom:32px}.hero-actions{display:flex;align-items:center;gap:28px}.text-link{font-size:14px}.hero-stats{margin-top:84px;border-top:1px solid #253441;display:grid;grid-template-columns:repeat(4,1fr)}.hero-stats div{padding:26px 24px 28px 0;border-right:1px solid #253441;display:flex;flex-direction:column}.hero-stats div+div{padding-left:26px}.hero-stats strong{font-family:var(--font-mono);font-size:27px;color:var(--lime)}.hero-stats span{font-weight:650;margin-top:7px}.hero-stats small{color:var(--muted);margin-top:4px}.section-nav{position:sticky;top:0;z-index:10;display:flex;overflow-x:auto;background:rgba(7,16,25,.96);border-block:1px solid #253441;padding:0 max(18px,4vw);backdrop-filter:blur(14px)}.section-nav a{min-width:max-content;padding:17px 16px;color:#aab5bf;font-size:11px;border-bottom:2px solid transparent}.section-nav a:hover{color:var(--teal);border-color:var(--teal)}.section-nav small{font-family:var(--font-mono);color:#587080;margin-right:7px}.paper-section{background:var(--paper);color:var(--ink);display:grid;grid-template-columns:minmax(170px,1fr) minmax(0,4fr);gap:6vw;padding:110px max(24px,8vw);border-bottom:1px solid var(--line)}.section-index{font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:#637078;padding-top:10px}.section-content{max-width:920px}.section-content h2,.researcher>h2{font-size:clamp(38px,5vw,68px);line-height:1;letter-spacing:-.05em;margin:0 0 34px}.section-content .lead{font-size:clamp(20px,2.3vw,29px);line-height:1.4;letter-spacing:-.02em;max-width:830px}.section-content>p:not(.lead){max-width:780px;color:#43515b}.callout{border-left:3px solid var(--teal);padding:10px 22px;margin-top:38px;background:#e8eeea}.callout span{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em}.callout p{margin:8px 0}.three-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:42px}.three-grid article{border:1px solid #cdd2ce;padding:26px;min-height:220px}.three-grid b,.action-stack b{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;color:#45726e}.three-grid h3{font-size:26px;margin:30px 0 10px}.three-grid p{color:#536068}.dark-panel{background:#0d1923;color:white;border-color:#20313e}.dark-panel .section-index{color:var(--teal)}.timeline{display:flex;align-items:center;justify-content:space-between;margin:55px 0 50px}.timeline div{display:flex;flex-direction:column;gap:8px}.timeline span{font-family:var(--font-mono);color:var(--teal);font-size:12px}.timeline strong{font-size:24px}.timeline small{color:#9facb7;line-height:1.6}.timeline i{font-style:normal;color:#526b77;font-size:24px}.safety-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.safety-grid div{background:#122331;border:1px solid #29404e;padding:25px}.safety-grid h3{color:var(--lime);margin-top:0}.safety-grid p{color:#adb9c2;margin-bottom:0}.equation{display:flex;gap:22px;align-items:center;margin:45px 0;padding:25px;border-block:1px solid #cfd5d1;font-family:var(--font-mono)}.equation span{padding:12px;background:#e4e9e5}.equation strong{color:#087e70}.method-grid{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid #ccd2cf;margin:35px 0 46px}.method-grid div{padding:24px 20px 24px 0;display:flex;flex-direction:column}.big-num{font-family:var(--font-mono);font-size:30px;color:#087e70}.method-grid small{margin-top:8px;color:#536068}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}.chips span{background:#e4e9e7;border-radius:99px;padding:8px 13px;font-size:12px}.evaluation{background:#e8eee9}.chart{margin-top:48px}.chart-row{margin-bottom:32px}.chart-label,.legend-values{display:flex;justify-content:space-between;font-size:13px}.chart-label span{font-family:var(--font-mono);color:#087e70}.bar-track{height:38px;background:#d3dbd6;position:relative;margin:10px 0}.bar{position:absolute;left:0;height:50%}.bar.baseline{top:0;background:#9aa7a1}.bar.model{bottom:0;background:#0aa993}.legend-values{font-size:10px;color:#637078}.metric-note{margin-top:50px;border-top:1px solid #bdc8c1;padding-top:22px;display:grid;grid-template-columns:1fr 3fr}.metric-note p{margin:0;color:#536068}.importance-list>div{display:grid;grid-template-columns:35px 2fr 3fr 60px;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #d4d8d5}.importance-list span{font-family:var(--font-mono);font-size:11px;color:#83908b}.importance-list i{height:6px;background:#d5dbd7}.importance-list i b{display:block;height:100%;background:#0aa993}.importance-list em{font-family:var(--font-mono);font-style:normal;font-size:12px}.limitation{margin-top:50px;padding:28px;background:#191f24;color:white}.limitation h3{color:var(--orange);margin-top:0}.limitation p{color:#b8c0c6}.action{background:#0c1720;color:white}.action .section-index{color:var(--teal)}.action-stack{display:flex;flex-direction:column;gap:12px}.action-stack article{display:grid;grid-template-columns:140px 1fr 80px;align-items:center;background:#13222e;border-left:4px solid #617480;padding:22px}.action-stack article.review{border-color:var(--teal)}.action-stack article.investigate{border-color:var(--orange)}.action-stack article>span{font-family:var(--font-mono);font-size:26px}.action-stack h3{margin:5px 0}.action-stack p{margin:0;color:#aeb9c1}.action-stack small{text-align:right;color:#8999a4}.guardrail{text-align:center;margin-top:18px;padding:18px;border:1px solid #2c414e;color:#aeb9c1;font-size:12px}.repro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:35px 0}.repro-grid article{background:#e6e9e5;padding:25px}.repro-grid span{font-family:var(--font-mono);color:#087e70}.repro-grid h3{font-size:22px}.repro-grid p{color:#536068}.credit{background:#dfe8e2}.credit code{background:#cdd8d1;padding:3px 6px}.source-note{font-family:var(--font-mono);font-size:12px;border-top:1px solid #bbc9c0;padding-top:20px;margin-top:35px}.researcher{padding:110px max(24px,8vw);background:radial-gradient(circle at 90% 20%,rgba(33,212,187,.09),transparent 25%),#071019}.researcher>h2{margin-top:30px;max-width:800px}.profile-card{border:1px solid #263645;background:#0b1520;display:grid;grid-template-columns:160px 1fr;gap:36px;padding:48px;margin-top:50px}.monogram{width:110px;height:110px;border-radius:22px;background:linear-gradient(135deg,#347ee8,#20c7b0);display:grid;place-items:center;font-size:36px;font-weight:800;align-self:center}.profile-copy h3{font-size:31px;margin:0 0 8px}.profile-copy>b{color:#aab7c3}.profile-copy p{color:#a8b5c1;max-width:810px}.profile-copy .chips span{background:#142231;color:#aebbc6}.profile-links{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}.profile-links a{border:1px solid #304353;border-radius:99px;padding:11px 18px;font-size:13px}.profile-links a:hover{border-color:var(--teal);color:var(--teal)}.mentor{display:grid;grid-template-columns:180px 1fr;gap:25px;margin-top:20px;border-top:1px solid #263645;padding:30px 10px}.mentor span{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;color:var(--teal)}.mentor p{margin:0;color:#aab7c3;max-width:850px}.mentor a{color:white;border-bottom:1px solid var(--teal)}footer{display:flex;justify-content:space-between;align-items:center;padding:32px max(24px,5vw);border-top:1px solid #243140;background:#050b11}footer div{display:flex;flex-direction:column}footer span,footer a{font-size:12px;color:#82919d;margin-top:4px}
+@media(max-width:800px){.header-links>a:first-child{display:none}.hero{padding-top:75px}.hero:after{opacity:.35}.hero-stats{grid-template-columns:1fr 1fr}.hero-stats div:nth-child(2){border-right:0}.paper-section{grid-template-columns:1fr;padding-block:78px;gap:25px}.three-grid,.repro-grid{grid-template-columns:1fr}.timeline{align-items:flex-start;flex-direction:column;gap:20px}.timeline i{transform:rotate(90deg)}.safety-grid{grid-template-columns:1fr}.method-grid{grid-template-columns:1fr}.equation{align-items:flex-start;flex-direction:column}.metric-note{grid-template-columns:1fr;gap:12px}.importance-list>div{grid-template-columns:25px 1.5fr 1fr 50px;gap:8px}.action-stack article{grid-template-columns:100px 1fr}.action-stack small{display:none}.profile-card{grid-template-columns:1fr;padding:28px}.mentor{grid-template-columns:1fr}.section-nav a{padding-inline:12px}}
+@media(max-width:520px){.hero{min-height:auto;padding-bottom:0}.hero h1{font-size:50px}.hero-actions{align-items:flex-start;flex-direction:column}.hero-stats{margin-top:55px}.hero-stats div{padding:18px 12px 18px 0}.hero-stats div+div{padding-left:14px}.hero-stats strong{font-size:22px}.paper-section,.researcher{padding-inline:20px}.section-content h2,.researcher>h2{font-size:40px}.chart-label span{display:none}.action-stack article{grid-template-columns:1fr}.profile-card{padding:22px}.site-header{padding-inline:18px}.button.small{font-size:11px}.header-links{gap:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Professional blue research system */
+.site-header{border-bottom-color:#1c3c64}.brand>span{border-color:#38bdf8;color:#38bdf8}.button{background:#2563eb;color:#fff;box-shadow:0 8px 25px rgba(37,99,235,.2)}.button.outline{background:transparent;border-color:#8ea6c0;color:var(--ink);box-shadow:none}
+.hero{min-height:720px;background:radial-gradient(circle at 84% 18%,rgba(34,211,238,.14),transparent 28%),linear-gradient(135deg,#06172f,#0a2852)}.hero:after{border-color:#195f93;box-shadow:0 0 0 70px rgba(37,99,235,.11),0 0 0 140px rgba(34,211,238,.055)}.eyebrow{color:#38bdf8}.eyebrow span{background:#38bdf8}.hero h1 em{color:#a8c8e8}.hero-copy{color:#c2d3e6}.hero-stats{margin-top:52px;border-top-color:#254b72}.hero-stats div{border-right-color:#254b72}.hero-stats strong{color:#67e8f9}
+.audience-guide{display:flex;gap:12px;margin-top:28px;position:relative;z-index:1}.audience-guide span{border:1px solid #285581;background:rgba(7,26,53,.58);padding:11px 14px;color:#b9cce0;font-size:11px}.audience-guide b{color:#67e8f9;margin-right:7px}
+.section-nav{background:rgba(7,26,53,.97);border-color:#24486d}.section-nav a:hover{color:#67e8f9;border-color:#38bdf8}.callout{border-left-color:#2563eb;background:#eaf1ff}.three-grid b,.action-stack b{color:#2559a6}.dark-panel{background:#0b2345;border-color:#21466e}.dark-panel .section-index,.timeline span{color:#67e8f9}.safety-grid div{background:#102e56;border-color:#285786}.safety-grid h3{color:#67e8f9}.equation strong,.big-num,.repro-grid span{color:#1d4ed8}.evaluation{background:#eef5ff}.importance-list i b{background:#2563eb}.action{background:#091f3d}.action .section-index{color:#67e8f9}.action-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}.action-stack article{grid-template-columns:115px 1fr 65px;background:#102e56;border-left-color:#6f89a6;padding:20px}.action-stack article.review{border-color:#38bdf8}.action-stack article.investigate{border-color:#f59e0b}.guardrail{border-color:#2c5782;color:#bed0e1}.researcher{background:radial-gradient(circle at 90% 20%,rgba(34,211,238,.1),transparent 25%),#071a35}.profile-card{background:#0b2345;border-color:#294d74}.monogram{background:linear-gradient(135deg,#2563eb,#22d3ee)}footer{background:#041126;border-top-color:#1d3c60}
+.evidence-figure{margin:45px 0 0;background:#fff;border:1px solid #cedced;border-radius:8px;padding:22px;box-shadow:0 16px 45px rgba(20,54,92,.08)}.evidence-figure img{display:block;width:100%;height:auto}.evidence-figure figcaption{border-top:1px solid #dce6f1;margin-top:18px;padding-top:16px;color:#52657a;font-size:12px;line-height:1.65}.evidence-figure figcaption b{color:#17375d}.metric-note{margin-top:32px;border-top-color:#bfd0e3}.action-figure{margin:0;background:#f8fbff}
+@media(max-width:900px){.action-layout{grid-template-columns:1fr}}
+@media(max-width:520px){.audience-guide{flex-direction:column}}
+[id]{scroll-margin-top:72px}
+.top-nav{display:flex;align-items:center;gap:28px;margin-left:auto;margin-right:28px}.top-nav a{font-size:12px;color:#b7c8da;transition:color .2s ease}.top-nav a:hover{color:#67e8f9}.github-button,.hero-secondary{display:inline-flex;align-items:center;border:1px solid #31577d;border-radius:99px;padding:10px 16px;color:#fff;font-size:12px}.github-button:hover,.hero-secondary:hover{border-color:#38bdf8;color:#67e8f9}.hero-secondary{border-radius:4px;padding:14px 19px;background:rgba(8,34,68,.6)}
+@media(max-width:1080px){.top-nav{display:none}}
+@media(max-width:600px){.brand small{max-width:180px}.github-button{padding:9px 12px}.hero-actions{width:100%}.hero-actions>a{width:100%}}
+@media(max-width:800px){.header-links>a:first-child{display:inline-flex}}
+@media(max-width:560px){.header-links>a:first-child{display:none}}
+.profile-button{display:inline-flex;align-items:center;border:1px solid #31577d;border-radius:99px;padding:10px 16px;color:#fff;font-size:12px}.profile-button:hover{border-color:#38bdf8;color:#67e8f9}
+@media(max-width:560px){.header-links>a.profile-button{display:inline-flex;padding:9px 11px;font-size:10px}.brand small{max-width:145px}}
+</style>
 </head>
-<body>
-  <div class="topbar">
-    <div class="wrap"><strong>FlyRank ML Internship</strong><span>Public-safe research case study · 2026</span></div>
-  </div>
-
-  <header class="hero">
-    <div class="wrap">
-      <p class="kicker">Google Search Ranking & Discoverability Capstone</p>
-      <h1>Can historical search signals prioritize CTR review opportunities?</h1>
-      <p class="subtitle">A clear, reproducible workflow that uses February signals to rank observed March position-adjusted CTR opportunities and support April human review.</p>
-      <div class="abstract">
-        <h2>Abstract</h2>
-        <p>This case study asks whether historical aggregate search signals can help content teams prioritize pages for CTR review. I used public-safe, pseudonymized daily performance data from the FlyRank ML Internship dataset, with February features, a March position-adjusted CTR proxy label, and April action scoring. A Random Forest model was evaluated against a transparent February-only heuristic using a grouped pseudonymized-client holdout. On the same held-out clients, the model achieved Precision@20 of 0.900 versus 0.250 for the baseline, with Average Precision of 0.584 versus 0.339 and ROC-AUC of 0.730 versus 0.486. These measured results support a human-review queue for observed CTR opportunities; they do not establish that changing a title, snippet, or page will cause more clicks.</p>
-      </div>
-    </div>
-  </header>
-
-  <nav aria-label="Research paper navigation">
-    <div class="wrap">
-      <a href="#problem">Problem</a><a href="#data">Data</a><a href="#method">Method</a><a href="#results">Results</a><a href="#limits">Limitations</a><a href="#recommendations">Recommendations</a><a href="#reproducibility">Reproducibility</a>
-    </div>
-  </nav>
-
-  <main class="wrap">
-    <section id="problem">
-      <div class="section-label">01 · Introduction / Problem</div>
-      <h2>Help content teams decide where to look first</h2>
-      <p class="lede">A team cannot manually inspect every visible page. This case study supports a narrower decision: which pseudonymized content items should move to the top of a human CTR-review queue?</p>
-      <div class="two-col">
-        <div class="card"><h3>The challenge</h3><p>A low CTR does not automatically indicate a problem. Expected click-through rate varies with search position, so comparisons should be made within a comparable position tier.</p></div>
-        <div class="card"><h3>The decision supported</h3><p>Rank observed CTR gaps for human review. The output is prioritization, not an automated recommendation to edit a page.</p></div>
-      </div>
-    </section>
-
-    <section id="data">
-      <div class="section-label">02 · Data</div>
-      <h2>Public-safe warehouse scope</h2>
-      <p class="lede">The analysis streams aggregate daily records from FlyRank's internship warehouse table, <code>fact_content_daily_performance</code>, rather than downloading the full release. Pseudonymized identifiers are used only for grouping and validation.</p>
-      <table>
-        <thead><tr><th>Window</th><th>Purpose</th><th>Daily records</th><th>Pseudonymized clients</th><th>Pseudonymized content items</th></tr></thead>
-        <tbody>
-          <tr><td>February 2026</td><td>Predictor features</td><td>7,355,108</td><td>54</td><td>321,546</td></tr>
-          <tr><td>March 2026</td><td>Position-adjusted CTR proxy label</td><td>9,841,378</td><td>55</td><td>331,437</td></tr>
-          <tr><td>April 2026</td><td>Action-playbook scoring</td><td>10,424,730</td><td>61</td><td>362,172</td></tr>
-        </tbody>
-      </table>
-      <p class="small">The public paper excludes raw URLs, page titles, queries, client names, credentials, row-level recommendations, target-derived fields, and product/action flags.</p>
-    </section>
-
-    <section id="method">
-      <div class="section-label">03 · Methodology</div>
-      <h2>One simple time order: February → March → April</h2>
-      <p class="lede">The time order makes the question easier to explain: learn from February, evaluate against an observed March proxy, then create an April decision-support queue.</p>
-      <div class="flow">
-        <div class="flow-step"><div class="month">February</div><h3>Features</h3><p>Impressions, average position, engagement signals, observed-day coverage, GA4 availability, and position bucket.</p></div>
-        <div class="flow-step"><div class="month">March</div><h3>Observed proxy label</h3><p>Whether CTR is below the median CTR of comparable items in the same position bucket.</p></div>
-        <div class="flow-step"><div class="month">April</div><h3>Human-review labels</h3><p>Review, investigate, or monitor. No site or content change is automated.</p></div>
-      </div>
-      <div class="callout"><p><strong>Validation and leakage controls.</strong> The Random Forest and the February-only baseline are evaluated on the same grouped pseudonymized-client holdout. The final validation has 12 held-out clients and zero client overlap. Identifiers, March outcome fields, future-window fields, product flags, action labels, and target-derived columns are excluded from model inputs.</p></div>
-      <p>The transparent baseline ranks February items in positions 4–20 by February impression volume. The model uses median imputation with missingness indicators for numeric fields and one-hot encoding for the February position bucket.</p>
-    </section>
-
-    <section id="results">
-      <div class="section-label">04 · Results</div>
-      <h2>Measured on the same held-out clients</h2>
-      <p class="lede">The main question is not whether the model has a high score in isolation. It is whether it places more observed below-benchmark CTR items near the top of a small review queue than a transparent baseline does.</p>
-      <div class="metrics">
-        <div class="metric"><span class="value">0.900</span><span class="label">Random Forest Precision@20</span></div>
-        <div class="metric"><span class="value">0.250</span><span class="label">February-only baseline Precision@20</span></div>
-        <div class="metric"><span class="value">12</span><span class="label">Held-out pseudonymized clients</span></div>
-      </div>
-      <table>
-        <thead><tr><th>Held-out metric</th><th>February-only baseline</th><th>Random Forest</th></tr></thead>
-        <tbody>
-          <tr><td>Precision@20</td><td>0.250</td><td class="positive">0.900</td></tr>
-          <tr><td>Average Precision</td><td>0.339</td><td class="positive">0.584</td></tr>
-          <tr><td>ROC-AUC</td><td>0.486</td><td class="positive">0.730</td></tr>
-        </tbody>
-      </table>
-      <figure>
-        <img src="assets/model_vs_baseline.svg" alt="Bar chart comparing the held-out results of the February-only baseline and Random Forest model">
-        <figcaption><strong>How to read this chart:</strong> on the same held-out clients, the Random Forest places more observed below-benchmark CTR items near the top of a short human-review queue than the February-only heuristic.</figcaption>
-      </figure>
-    </section>
-
-    <section id="limits">
-      <div class="section-label">05 · Limitations & Honest Framing</div>
-      <h2>What the result does—and does not—support</h2>
-      <div class="two-col">
-        <div class="card"><h3>What it supports</h3><p>Observed, position-adjusted ranking of items for human CTR review on held-out pseudonymized clients.</p></div>
-        <div class="card"><h3>What it does not support</h3><p>A claim that a title, snippet, or page edit will cause more clicks, or a claim about Google's proprietary ranking algorithm.</p></div>
-      </div>
-      <ul>
-        <li>The March label is a position-adjusted CTR proxy, not direct business impact or user satisfaction.</li>
-        <li>March availability and the eligibility rule are outcome-window choices and must be considered when interpreting the results.</li>
-        <li>Performance may vary across future periods, other clients, query mixes, seasonality, and search-result layouts.</li>
-        <li>Human review remains required for every review or investigation label.</li>
-      </ul>
-    </section>
-
-    <section id="recommendations">
-      <div class="section-label">06 · Ranked Recommendations</div>
-      <h2>April action-playbook summary</h2>
-      <p class="lede">The February-to-March model was applied to eligible aggregated April 2026 items. All outputs are decision-support labels and require human judgment.</p>
-      <table>
-        <thead><tr><th>Action label</th><th>April aggregate items</th><th>What a person does next</th></tr></thead>
-        <tbody>
-          <tr><td>REVIEW_CTR_OPPORTUNITY</td><td>9,197</td><td>Review snippet, intent, and the observed CTR opportunity before proposing a change.</td></tr>
-          <tr><td>INVESTIGATE_HIGH_RISK</td><td>1,518</td><td>Diagnose further before deciding whether intervention is appropriate.</td></tr>
-          <tr><td>MONITOR</td><td>96,429</td><td>Retain for monitoring; no current intervention is prioritized.</td></tr>
-        </tbody>
-      </table>
-      <figure>
-        <img src="assets/action_playbook_distribution.svg" alt="Bar chart showing April action-playbook aggregate item counts">
-        <figcaption><strong>How to read this chart:</strong> the review queue is intentionally smaller than the scored population so that human attention is directed toward the most relevant observed opportunities first.</figcaption>
-      </figure>
-    </section>
-
-    <section id="reproducibility">
-      <div class="section-label">07 · Reproducibility</div>
-      <h2>Inspect the complete workflow</h2>
-      <p class="lede">The notebooks, aggregate artifacts, and fixed-seed workflow are available in the public repository. The published materials contain no raw or row-level dataset export.</p>
-      <ul>
-        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks">Repository</a></li>
-        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/capstone.ipynb">Capstone notebook</a></li>
-        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/w05_model.ipynb">Model comparison notebook</a></li>
-        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/w06_validation_audit.ipynb">Validation and claim audit</a></li>
-        <li><a href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks/blob/main/work/notebooks/w07_action_playbook.ipynb">April action playbook</a></li>
-      </ul>
-    </section>
-
-    <section id="acknowledgments">
-      <div class="section-label">08 · Acknowledgments & Data Credit</div>
-      <h2>Data credit</h2>
-      <p><a href="https://flyrank.ai">Built on the FlyRank ML Internship dataset</a>.</p>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap"><strong>Public-safe research artifact</strong><p>Observed · measured · directional · decision-support.</p></div>
-  </footer>
-</body>
+<body><link rel="preload" as="image" href="assets/model_vs_baseline.svg"/><link rel="preload" as="image" href="assets/action_playbook_distribution.svg"/><main><header class="site-header"><a class="brand" href="#top" aria-label="Ramya Hegde capstone home"><span>RH</span><div>Ramya Hegde<small>AI/ML Engineering Intern · FlyRank AI</small></div></a><div class="header-links"><a class="profile-button" href="#researcher">Contact &amp; Profile</a></div></header><section class="hero" id="top"><div class="eyebrow"><span></span> Google Search Ranking &amp; Discoverability Capstone · 2026</div><h1>Finding the right content<br/><em>to review first.</em></h1><p class="hero-copy">A leakage-aware machine learning system that uses February search and engagement signals to prioritize likely March CTR opportunities—without automating a single page change.</p><div class="hero-actions"><a class="button" href="#abstract">Read the research <span>↓</span></a><a class="hero-secondary" href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks" target="_blank">View GitHub ↗</a><a class="text-link" href="flyrank-seo-research-march-2026.pdf" download="">Download paper ↓</a></div><div class="audience-guide"><span><b>For a quick review</b> Start with Evaluation and Recommendation</span><span><b>For technical depth</b> Follow sections 02–06</span></div><div class="hero-stats"><div><strong>0.90</strong><span>Precision@20</span><small>Random Forest</small></div><div><strong>12</strong><span>Held-out clients</span><small>Zero overlap</small></div><div><strong>107,144</strong><span>April items scored</span><small>Human-in-the-loop</small></div><div><strong>3.6×</strong><span>Top-20 precision</span><small>vs. baseline</small></div></div></section><nav class="section-nav" aria-label="Research sections"><a href="#abstract"><small>00</small>Abstract</a><a href="#problem"><small>01</small>Problem</a><a href="#data-safety"><small>02</small>Data safety</a><a href="#baseline"><small>03</small>Baseline</a><a href="#model"><small>04</small>Model</a><a href="#evaluation"><small>05</small>Evaluation</a><a href="#interpretation"><small>06</small>Interpretation</a><a href="#recommendation"><small>07</small>Recommendation</a><a href="#reproducibility"><small>08</small>Reproducibility</a><a href="#data-credit"><small>09</small>Data credit</a></nav><section class="paper-section intro-section" id="abstract"><div class="section-index">00 / ABSTRACT</div><div class="section-content"><h2>The study, in brief.</h2><p class="lead">Can February signals identify content items likely to fall below their position-adjusted CTR benchmark in March?</p><p>This project compares a transparent February-only ranking rule with a Random Forest classifier on whole pseudonymized clients held out from training. The learned model improved Precision@20 from 0.25 to 0.90, helping a content or SEO team focus a small manual-review queue. The result is observational decision support—not proof that an edit will cause more clicks.</p><div class="callout"><span>Research boundary</span><p>The system ranks review opportunities. It never changes titles, snippets, URLs, content, or publishing status.</p></div></div></section><section class="paper-section" id="problem"><div class="section-index">01 / PROBLEM FRAMING</div><div class="section-content"><h2>Turn a broad signal into a focused decision.</h2><p class="lead">The operational question is not “What will Google do?” It is “What should a human inspect next?”</p><div class="three-grid"><article><b>Decision</b><h3>Prioritize</h3><p>Create a small, ranked queue of visible content items with possible CTR opportunity.</p></article><article><b>Outcome proxy</b><h3>Compare fairly</h3><p>March CTR below the median of comparable items in the same March position bucket.</p></article><article><b>Action</b><h3>Review first</h3><p>Inspect title, snippet, intent, page context and tracking before proposing any change.</p></article></div></div></section><section class="paper-section dark-panel" id="data-safety"><div class="section-index">02 / DATA SAFETY</div><div class="section-content"><h2>Time moves forward. Identities stay protected.</h2><div class="timeline"><div><span>FEB</span><strong>Features</strong><small>7.36M daily records<br/>54 pseudonymized clients</small></div><i>→</i><div><span>MAR</span><strong>Outcome</strong><small>9.84M daily records<br/>Position-adjusted proxy</small></div><i>→</i><div><span>APR</span><strong>Action scoring</strong><small>10.42M daily records<br/>107,144 eligible items</small></div></div><div class="safety-grid"><div><h3>Included</h3><p>Aggregated search and engagement signals, observation coverage, transparent position buckets, and availability indicators.</p></div><div><h3>Excluded</h3><p>Client names, domains, URLs, titles, private queries, credentials, product flags, and identifiers as model features.</p></div></div></div></section><section class="paper-section" id="baseline"><div class="section-index">03 / BASELINE</div><div class="section-content"><h2>A simple rule earns the right to be beaten.</h2><p class="lead">Rank eligible February positions 4–20 by February impression volume; all other items receive a score of zero.</p><div class="equation"><span>eligible visibility</span><b>+</b><span>February demand</span><b>→</b><strong>review rank</strong></div><p>The baseline is intentionally transparent, available before the March outcome, and evaluated on the same held-out clients as the model.</p></div></section><section class="paper-section" id="model"><div class="section-index">04 / MODEL &amp; ANALYSIS</div><div class="section-content" id="method"><h2>Built for non-linear search behavior.</h2><div class="method-grid"><div><span class="big-num">73,481</span><small>eligible February-to-March rows</small></div><div><span class="big-num">33</span><small>clients in the model frame</small></div><div><span class="big-num">7</span><small>source feature families</small></div></div><h3>Random Forest classifier</h3><p>Numeric features use median imputation with missingness indicators. Categorical features use most-frequent imputation and one-hot encoding. Entire clients stay in either training or validation, producing 21 training clients and 12 unseen validation clients with zero overlap.</p><div class="chips"><span>February impressions</span><span>Average position</span><span>Observed days</span><span>Scroll events</span><span>Social sessions</span><span>Position bucket</span><span>GA4 availability</span></div></div></section><section class="paper-section evaluation" id="evaluation"><div class="section-index">05 / EVALUATION</div><div class="section-content"><h2>The learned ranking finds more relevant review candidates.</h2><p class="lead">On held-out pseudonymized clients, the model leads the February-only baseline on every reported ranking metric.</p><figure class="evidence-figure"><img src="assets/model_vs_baseline.svg" alt="Bar chart comparing the February-only baseline with the Random Forest across Precision at 20, Average Precision, and ROC-AUC"/><figcaption><b>Figure 1 · Held-out model performance.</b> Random Forest improves Precision@20 from 0.25 to 0.90, Average Precision from 0.339 to 0.584, and ROC-AUC from 0.486 to 0.730. Aggregate output generated by the executed capstone notebook.</figcaption></figure><div class="metric-note"><b>Why Precision@20?</b><p>It measures how many genuine March proxy-positive items appear in a deliberately small queue that a content team can realistically review.</p></div></div></section><section class="paper-section" id="interpretation"><div class="section-index">06 / INTERPRETATION</div><div class="section-content"><h2>Position leads. Demand and coverage add context.</h2><div class="importance-list"><div><span>01</span><strong>February average position</strong><i><b style="width:83.05000000000001%"></b></i><em>37.75%</em></div><div><span>02</span><strong>February impressions</strong><i><b style="width:36.014%"></b></i><em>16.37%</em></div><div><span>03</span><strong>Position bucket · 21–50</strong><i><b style="width:27.632000000000005%"></b></i><em>12.56%</em></div><div><span>04</span><strong>February observed days</strong><i><b style="width:19.602%"></b></i><em>8.91%</em></div><div><span>05</span><strong>Position bucket · 4–10</strong><i><b style="width:11.198%"></b></i><em>5.09%</em></div></div><div class="limitation"><h3>What the result does not establish</h3><p>It does not measure causal business impact, fully represent query intent or SERP features, guarantee performance for every client, or prove that editing a page will increase clicks.</p></div></div></section><section class="paper-section action" id="recommendation"><div class="section-index">07 / RECOMMENDATION</div><div class="section-content"><h2>Three labels. Every consequential step stays human.</h2><div class="action-layout"><div class="action-stack"><article class="review"><span>9,197</span><div><b>REVIEW</b><h3>CTR opportunity</h3><p>Review snippet, intent, page context and tracking.</p></div><small>8.58%</small></article><article class="investigate"><span>1,518</span><div><b>INVESTIGATE</b><h3>High-risk item</h3><p>Diagnose further before deciding whether to act.</p></div><small>1.42%</small></article><article><span>96,429</span><div><b>MONITOR</b><h3>No current intervention</h3><p>Keep the item in ongoing monitoring.</p></div><small>90.00%</small></article></div><figure class="evidence-figure action-figure"><img src="assets/action_playbook_distribution.svg" alt="Bar chart showing the number of April items assigned to review, investigate, and monitor actions"/><figcaption><b>Figure 2 · April action distribution.</b> The model narrows 107,144 eligible items into practical decision-support groups. Aggregate output generated by the executed capstone notebook.</figcaption></figure></div><div class="guardrail">No automatic title changes · No content rewrites · No URL changes · No publishing actions</div></div></section><section class="paper-section" id="reproducibility"><div class="section-index">08 / REPRODUCIBILITY</div><div class="section-content"><h2>Evidence that can be traced.</h2><p class="lead">The public repository preserves the capstone notebook, nine supporting notebooks, dependency definitions, aggregate charts, and a machine-readable paper summary.</p><div class="repro-grid"><article><span>01</span><h3>Inspect</h3><p>Review the executed capstone and weekly notebooks.</p></article><article><span>02</span><h3>Recreate</h3><p>Use the documented Python, pandas, DuckDB and scikit-learn environment.</p></article><article><span>03</span><h3>Verify</h3><p>Compare the generated public-safe aggregate artifacts.</p></article></div><a class="button outline" target="_blank" href="https://github.com/ramyaa-hegde/flyrank-ml-internship-tasks">Open the source repository ↗</a></div></section><section class="paper-section credit" id="data-credit"><div class="section-index">09 / DATA CREDIT</div><div class="section-content"><h2>Credit, care and responsible use.</h2><p>This capstone uses the FlyRank ML Internship warehouse table <code>fact_content_daily_performance</code>, an approved public-safe release of aggregated, pseudonymized search and engagement data. FlyRank AI provided the internship framework and data-access boundaries. All interpretations, analysis, implementation and presentation are Ramya Hegde’s capstone work.</p><p class="source-note">Claims are framed as observed, measured, directional and decision-support only.</p></div></section><section class="researcher" id="researcher"><div class="eyebrow"><span></span> Project creator</div><h2>Meet the practitioner behind the project.</h2><div class="profile-card"><div class="monogram">RH</div><div class="profile-copy"><h3>Ramya Hegde</h3><b>AI/ML Engineering Intern · FlyRank AI</b><p>I build practical machine learning and AI systems that turn complex data and technical work into useful decisions. My work focuses on search intelligence, leakage-aware ML pipelines, data analysis, and human-in-the-loop decision support.</p><p>My experience as a Senior Operations Analyst adds an operational perspective—connecting analytical findings with real workflows, clear communication, and practical action.</p><div class="chips"><span>Python</span><span>Pandas</span><span>NumPy</span><span>DuckDB</span><span>Scikit-learn</span><span>Jupyter</span></div><div class="profile-links"><a href="https://www.linkedin.com/in/ramyaahegde" target="_blank">LinkedIn ↗</a><a href="https://ramyaa-hegde.github.io/ramyaa-hegde-portfolio/" target="_blank">Portfolio ↗</a><a href="https://github.com/ramyaa-hegde" target="_blank">GitHub ↗</a></div></div></div><div class="mentor"><span>MENTORSHIP</span><p>I completed this capstone during my AI/ML Engineering internship at FlyRank AI under the mentorship of <a href="https://www.linkedin.com/in/mirzaasceric/" target="_blank">Mirza Ašćerić ↗</a>. This project showcases my work across problem framing, leakage-aware methodology, grouped validation, model interpretation, and human-in-the-loop decision support.</p></div></section><footer><div><b>Ramya Hegde</b><span>Google Search Ranking &amp; Discoverability Capstone · 2026</span></div><a href="#top">Back to top ↑</a></footer></main></body>
 </html>
-
